@@ -1,10 +1,8 @@
-import {Button, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {format} from 'date-fns';
-import moment from 'moment';
+import {View, StyleSheet, Text} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
-LocaleConfig.locales['fr'] = {
+LocaleConfig.locales['ko'] = {
   monthNames: [
     '1월',
     '2월',
@@ -19,107 +17,129 @@ LocaleConfig.locales['fr'] = {
     '11월',
     '12월',
   ],
-
-  monthNamesShort: [
-    'Janv.',
-    'Févr.',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'Août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.',
-  ],
-  dayNames: [
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일',
-    '일요일',
-  ],
+  dayNames: ['월', '화', '수', '목', '금', '토', '일'],
   dayNamesShort: ['월', '화', '수', '목', '금', '토', '일'],
-  today: "Aujourd'hui",
+  today: '오늘',
 };
 
-LocaleConfig.defaultLocale = 'fr';
+LocaleConfig.defaultLocale = 'ko';
 
 const Calendars = () => {
-  const [selectedDates, setSelectedDates] = useState({});
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [isStartDatePicked, setIsStartDatePicked] = useState(false);
+  const [isEndDatePicked, setIsEndDatePicked] = useState(false);
+  const [markedDates, setMarkedDates] = useState({});
 
-  const handleDateSelect = date => {
-    const newSelectedDates = {...selectedDates};
-
-    if (!startDate) {
-      // 시작 날짜 선택
-      newSelectedDates[date.dateString] = {
-        startingDay: true,
-        color: 'blue',
-        textColor: 'white',
-      };
-      setSelectedDates(newSelectedDates);
-      setStartDate(date.dateString);
-    } else if (!endDate) {
-      // 종료 날짜 선택
-      newSelectedDates[date.dateString] = {
-        endingDay: true,
-        color: 'blue',
-        textColor: 'white',
-      };
-      setSelectedDates(newSelectedDates);
-      setEndDate(date.dateString);
-
-      // 시작 날짜와 종료 날짜 사이의 모든 날짜 선택
-      const currentDate = new Date(startDate);
-      while (currentDate <= new Date(date.dateString)) {
-        const dateString = currentDate.toISOString().split('T')[0];
-        newSelectedDates[dateString] = {
-          selected: true,
-          color: 'blue',
-          textColor: 'white',
-        };
-        currentDate.setDate(currentDate.getDate() + 1);
+  const onDayPress = day => {
+    // 처음 선택하거나 시작일과 종료일이 함께 선택이 된 경우
+    if (!isStartDatePicked || (isStartDatePicked && isEndDatePicked)) {
+      setupStartAndEndDate(day.dateString);
+      // 시작일이 선택되고 종료일이 선택되지 않았다면
+    } else if (!isEndDatePicked) {
+      let [mMarkedDates, startDate] = setupEndDate(day.dateString);
+      console.log('Day.DateString', day.dateString);
+      if (startDate) {
+        //시작 종료 객체 , 시작일 , 종료일
+        setupPeriod(mMarkedDates, startDate, day.dateString);
       }
-      setSelectedDates(newSelectedDates);
-    } else {
-      // 이미 시작 날짜와 종료 날짜를 선택한 경우 초기화하고 다시 선택
-      const clearedDates = {
-        [date.dateString]: {
-          startingDay: true,
-          color: 'blue',
-          textColor: 'white',
-        },
-      };
-      setSelectedDates(clearedDates);
-      setStartDate(date.dateString);
-      setEndDate(null);
     }
   };
+
+  // markedDates={{
+  //   '2012-03-01': {selected: true, marked: true, selectedColor: 'blue'},
+  //   '2012-03-02': {marked: true},
+  //   '2012-03-03': {selected: true, marked: true, selectedColor: 'blue'}
+  // }}
+
+  const setupStartAndEndDate = date => {
+    // 시작일이 선택됨
+    setIsStartDatePicked(true);
+    // 종료일은 선택안됨
+    setIsEndDatePicked(false);
+
+    setMarkedDates({
+      // 시작일 객체를 생성
+      [date]: {startingDay: true, color: '#262626', textColor: 'white'},
+    });
+  };
+
+  const setupEndDate = date => {
+    setIsEndDatePicked(true);
+    let startDate = Object.keys(markedDates).find(
+      key => markedDates[key].startingDay === true,
+    );
+
+    console.log('Start Date', startDate);
+
+    let mMarkedDates = {...markedDates};
+    // 종료일을 키값으로 가지는 종료일 객체를 생성
+    mMarkedDates[date] = {
+      endingDay: true,
+      color: '#262626',
+      textColor: 'white',
+    };
+
+    console.log('mMarkedDates', mMarkedDates);
+    // mMarkedDates는 시작일과 종료일 객체가 입력된 상태
+    // startDate는 스트링화된 시작일을 반환
+    return [mMarkedDates, startDate];
+  };
+
+  const setupPeriod = (mMarkedDates, startDate, endDate) => {
+    let startDt = Date.parse(startDate);
+    let endDt = Date.parse(endDate);
+    let curDate = startDt;
+
+    while (curDate <= endDt) {
+      // ISO 8601 형태로 날짜를 나타낸 다음 T를 기준으로 배열로 쪼개고 첫번째 값을 가져온다.
+      let curDayString = new Date(curDate).toISOString().split('T')[0];
+      console.log('curDate', new Date(curDate));
+      console.log('curDayString', curDayString);
+
+      // 키값이 없다면
+      if (!mMarkedDates[curDayString]) {
+        mMarkedDates[curDayString] = {color: '#262626', textColor: 'white'};
+      }
+
+      // curDate값을 하루만큼 증가
+      curDate += 24 * 60 * 60 * 1000;
+    }
+    setMarkedDates(mMarkedDates);
+  };
+
+  console.log('markedDates', markedDates);
 
   return (
     <View style={styles.container}>
       <Calendar
-        onDayPress={handleDateSelect}
-        markingType={'period'}
-        markedDates={selectedDates}
+        style={{
+          borderWidth: 1,
+          borderColor: 'gray',
+          height: 350,
+        }}
+        theme={{
+          backgroundColor: '#ffffff',
+          calendarBackground: '#ffffff',
+          textSectionTitleColor: 'red',
+          selectedDayBackgroundColor: '#00adf5',
+          selectedDayTextColor: '#ffffff',
+          todayTextColor: '#00adf5',
+          dayTextColor: '#2d4150',
+          textDisabledColor: '#d9e',
+        }}
+        markingType="period"
+        // markingType="dot"
+        markedDates={markedDates}
+        onDayPress={onDayPress}
       />
     </View>
   );
 };
 
-export default Calendars;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: 50,
   },
 });
+
+export default Calendars;

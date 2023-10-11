@@ -1,79 +1,32 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# react-native-calendars theme prop
 
-# Getting Started
-
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
-
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+backgroundColor: 달력의 배경색입니다.
+calendarBackground: 캘린더 내부의 배경색입니다.
+textSectionTitleColor: 월/년도 텍스트 색상입니다.
+selectedDayBackgroundColor: 선택된 날짜의 배경색입니다.
+selectedDayTextColor: 선택된 날짜의 텍스트 색상입니다.
+todayTextColor: 오늘 날짜의 텍스트 색상입니다.
+dayTextColor: 일반 날짜의 텍스트 색상입니다.
+textDisabledColor: 비활성화된 날짜의 텍스트 색상입니다.
+dotColor: 날짜에 표시되는 점의 색상입니다.
+selectedDotColor: 선택된 날짜에 표시되는 점의 색상입니다.
+arrowColor: 화살표(이전/다음 월로 이동)의 색상입니다.
+disabledArrowColor: 비활성화된 화살표의 색상입니다.
+monthTextColor: 월 텍스트의 색상입니다.
+indicatorColor: 누락된 날짜 표시 인디케이터의 색상입니다.
+textDayFontFamily: 일별 텍스트의 글꼴입니다.
+textMonthFontFamily: 월 텍스트의 글꼴입니다.
+textDayHeaderFontFamily: 일 헤더(일, 월, 화 등)의 글꼴입니다.
+textDayFontSize: 일별 텍스트의 글꼴 크기입니다.
+textMonthFontSize: 월 텍스트의 글꼴 크기입니다.
+textDayHeaderFontSize: 일 헤더의 글꼴 크기입니다.
+textDayFontWeight: 일별 텍스트의 글꼴 두께입니다.
+textMonthFontWeight: 월 텍스트의 글꼴 두께입니다.
+textDayHeaderFontWeight: 일 헤더의 글꼴 두께입니다.
+textDayStyle: 일별 텍스트 스타일 객체입니다.
+dotStyle: 날짜에 표시되는 점의 스타일 객체입니다.
+arrowStyle: 화살표의 스타일 객체입니다.
+hideExtraDays: 보이지 않는 줄의 날짜를 숨길지 여부입니다.
+showWeekNumbers: 주 번호를 표시할지의 여부입니다.
+weekNumbersStyle: 주 번호의 스타일 객체입니다.
+이러한 속성들을 활용하여 캘린더의 디자인을 사용자의 요구에 맞게 맞춤화할 수 있습니다.
