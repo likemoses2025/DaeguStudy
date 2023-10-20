@@ -19,7 +19,7 @@ import AppInner from './AppInner';
 
 const App = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <AppInner />
     </SafeAreaView>
   );

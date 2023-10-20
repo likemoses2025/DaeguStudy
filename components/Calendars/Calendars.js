@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, SafeAreaView} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 LocaleConfig.locales['ko'] = {
@@ -29,6 +29,10 @@ const Calendars = () => {
   const [isEndDatePicked, setIsEndDatePicked] = useState(false);
   const [markedDates, setMarkedDates] = useState({});
 
+  const [startDay, setStartDay] = useState('');
+  const [endDay, setEndDay] = useState('');
+  const [period, setPeriod] = useState([]);
+
   const onDayPress = day => {
     // 처음 선택하거나 시작일과 종료일이 함께 선택이 된 경우
     if (!isStartDatePicked || (isStartDatePicked && isEndDatePicked)) {
@@ -36,11 +40,11 @@ const Calendars = () => {
       // 시작일이 선택되고 종료일이 선택되지 않았다면
     } else if (!isEndDatePicked) {
       let [mMarkedDates, startDate] = setupEndDate(day.dateString);
-      console.log('Day.DateString', day.dateString);
       if (startDate) {
         //시작 종료 객체 , 시작일 , 종료일
         setupPeriod(mMarkedDates, startDate, day.dateString);
       }
+      setPeriod(Object.keys(mMarkedDates));
     }
   };
 
@@ -60,15 +64,16 @@ const Calendars = () => {
       // 시작일 객체를 생성
       [date]: {startingDay: true, color: '#262626', textColor: 'white'},
     });
+    setStartDay(date);
   };
 
   const setupEndDate = date => {
     setIsEndDatePicked(true);
+    setEndDay(date);
+
     let startDate = Object.keys(markedDates).find(
       key => markedDates[key].startingDay === true,
     );
-
-    console.log('Start Date', startDate);
 
     let mMarkedDates = {...markedDates};
     // 종료일을 키값으로 가지는 종료일 객체를 생성
@@ -85,7 +90,7 @@ const Calendars = () => {
   };
 
   const setupPeriod = (mMarkedDates, startDate, endDate) => {
-    let startDt = Date.parse(startDate);
+    let startDt = Date.parse(startDate); //시작일 밀리초 단위의 숫자를 반환
     let endDt = Date.parse(endDate);
     let curDate = startDt;
 
@@ -103,18 +108,18 @@ const Calendars = () => {
       // curDate값을 하루만큼 증가
       curDate += 24 * 60 * 60 * 1000;
     }
+
     setMarkedDates(mMarkedDates);
   };
 
-  console.log('markedDates', markedDates);
-
   return (
-    <View style={styles.container}>
+    <View>
       <Calendar
         style={{
           borderWidth: 1,
           borderColor: 'gray',
-          height: 350,
+          height: 320,
+          backgroundColor: 'white',
         }}
         theme={{
           backgroundColor: '#ffffff',
@@ -131,6 +136,13 @@ const Calendars = () => {
         markedDates={markedDates}
         onDayPress={onDayPress}
       />
+      <Text>시작일 : {startDay}</Text>
+      <Text>종료일 : {endDay}</Text>
+      <View>
+        {period.map(date => (
+          <Text key={date}>기 간 : {date}</Text>
+        ))}
+      </View>
     </View>
   );
 };
@@ -138,7 +150,7 @@ const Calendars = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'blue',
   },
 });
 
